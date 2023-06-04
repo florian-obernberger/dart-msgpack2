@@ -8,6 +8,7 @@ part 'src/types.dart';
 part 'src/serialize.dart';
 part 'src/deserialize.dart';
 part 'src/extensions.dart';
+part 'src/uint8_decoder.dart';
 
 const int defaultBufferSize = const int.fromEnvironment(
     "msgpack.packer.defaultBufferSize",

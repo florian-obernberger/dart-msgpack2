@@ -1,6 +1,6 @@
 import "dart:convert";
 
-import "package:msgpack2/msgpack.dart";
+import "package:msgpack/msgpack.dart";
 import "dart:io";
 
 const int TIMES = 10000;

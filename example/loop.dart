@@ -1,4 +1,4 @@
-import "package:msgpack2/msgpack2.dart";
+import 'package:msgpack/msgpack.dart';
 
 main(List<String> args) async {
   var count = 5000;

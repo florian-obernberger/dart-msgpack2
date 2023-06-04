@@ -29,7 +29,7 @@ class StringCache {
   }
 
   static List<int> get(String string) {
-    return _cache[string];
+    return _cache[string]!;
   }
 
   static void clear() {

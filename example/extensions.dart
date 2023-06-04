@@ -33,13 +33,17 @@ class OtherExample {
 
 class ExampleBuilder implements ExtensionFormat {
   final typeId = 2;
-  final OtherExample example;
+
+  /// You can leave the data empty while registering the Extension.
+  ///
+  /// [example] **cannot be null** when you're trying to encode.
+  final OtherExample? example;
 
   ExampleBuilder(this.example);
 
   void encode(Uint8Encoder encoder) {
-    encoder.encodeString(example.data);
-    encoder.encodeInt(example.number);
+    encoder.encodeString(example!.data);
+    encoder.encodeInt(example!.number);
   }
 
   OtherExample decode(Uint8Decoder decoder) {

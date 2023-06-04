@@ -47,7 +47,8 @@ void registerExtension<T extends ExtensionFormat>(T obj) {
 /// only encode using the 64 or 96 bit encodings (and not the 32 bit). However
 /// we can decode from all formats specified in the spec.
 class ExtTimeStamp implements ExtensionFormat {
-  final DateTime time;
+  /// [time] can only be null when registering the Extension.
+  final DateTime? time;
   final int typeId = -1;
 
   /// Constructor takes the [DateTime] to be packaged, this can be then passed
@@ -58,12 +59,12 @@ class ExtTimeStamp implements ExtensionFormat {
   void encode(Uint8Encoder encoder) {
     // We always pack Timestamps to 64 or 96-bit timestamps.
     // Can't directly get seconds, so fake it till you make it.
-    var sec = time.millisecondsSinceEpoch ~/ 1000;
+    var sec = time!.millisecondsSinceEpoch ~/ 1000;
     // Use Microseconds for better precision.
     // Max nsec size is 999,999,999
     // Start with the modulus rather than convert to nano to limit chance
     // of an overflow.
-    var nsec = time.microsecondsSinceEpoch % 1000000;
+    var nsec = time!.microsecondsSinceEpoch % 1000000;
     nsec *= 1000; // Convert 999,999 microseconds to Nanoseconds.
     if (sec < 0) {
       sec += nsec ~/ (1000 * 1000); // remove seconds represented by nanoseconds
@@ -72,30 +73,30 @@ class ExtTimeStamp implements ExtensionFormat {
     }
     if (sec >= 0 && sec.bitLength <= 34) {
       var data = (nsec << 34) | sec;
-      encoder.encodeIntType(IntType.Uint64, data);
+      encoder.encodeIntType(IntType.uint64, data);
       return;
     }
 
-    encoder.encodeIntType(IntType.Uint32, nsec);
-    encoder.encodeIntType(IntType.Int64, sec);
+    encoder.encodeIntType(IntType.uint32, nsec);
+    encoder.encodeIntType(IntType.int64, sec);
   }
 
   DateTime decode(Uint8Decoder decoder) {
     int sec;
     int nsec;
     if (decoder.list.lengthInBytes == 4) {
-      sec = decoder.decodeInt(IntType.Uint32);
+      sec = decoder.decodeInt(IntType.uint32);
       return DateTime.fromMillisecondsSinceEpoch(sec * 1000);
     }
 
     if (decoder.list.lengthInBytes == 8) {
-      var data = decoder.decodeInt(IntType.Uint64);
+      var data = decoder.decodeInt(IntType.uint64);
       nsec = data >> 34;
       sec = data & 0x3ffffffff;
     } else {
       // 96 bit signed
-      nsec = decoder.decodeInt(IntType.Uint32);
-      sec = decoder.decodeInt(IntType.Int64);
+      nsec = decoder.decodeInt(IntType.uint32);
+      sec = decoder.decodeInt(IntType.int64);
     }
 
     nsec ~/= 1000 * 1000;

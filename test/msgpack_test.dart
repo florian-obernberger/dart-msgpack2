@@ -307,7 +307,7 @@ void packBin8() {
   var data = Uint8List.fromList(List.filled(32, 65));
   List<int> encoded = serialize(ByteData.view(data.buffer));
   expect(encoded.length, equals(34));
-  expect(encoded.getRange(0, 2), orderedEquals([BinaryType.Bin8.value, 32]));
+  expect(encoded.getRange(0, 2), orderedEquals([BinaryType.bin8.value, 32]));
   expect(encoded.getRange(2, encoded.length), orderedEquals(data));
 }
 
@@ -315,7 +315,7 @@ void packBin16() {
   var data = Uint8List.fromList(List.filled(256, 65));
   List<int> encoded = serialize(ByteData.view(data.buffer));
   expect(encoded.length, equals(256 + 3));
-  expect(encoded.getRange(0, 3), orderedEquals([BinaryType.Bin16.value, 1, 0]));
+  expect(encoded.getRange(0, 3), orderedEquals([BinaryType.bin16.value, 1, 0]));
   expect(encoded.getRange(3, encoded.length), orderedEquals(data));
 }
 
@@ -324,7 +324,7 @@ void packBin32() {
   List<int> encoded = serialize(ByteData.view(data.buffer));
   expect(encoded.length, equals(65536 + 5));
   expect(encoded.getRange(0, 5),
-      orderedEquals([BinaryType.Bin32.value, 0, 1, 0, 0]));
+      orderedEquals([BinaryType.bin32.value, 0, 1, 0, 0]));
   expect(encoded.getRange(5, encoded.length), orderedEquals(data));
 }
 
@@ -332,7 +332,7 @@ void packBinOffset() {
   var data = Uint8List.fromList(List.filled(32, 65));
   List<int> encoded = serialize(ByteData.view(data.buffer, 8));
   expect(encoded.length, equals(26));
-  expect(encoded.getRange(0, 2), orderedEquals([BinaryType.Bin8.value, 24]));
+  expect(encoded.getRange(0, 2), orderedEquals([BinaryType.bin8.value, 24]));
   expect(encoded.getRange(2, encoded.length),
       orderedEquals(data.getRange(8, data.lengthInBytes)));
 }
